@@ -17,11 +17,8 @@ class CreatePilotosTable extends Migration
             $table->id();
             $table->string('nombre',70);
             $table->string('apellido',70);
-            $table->string('edad',70);
-            $table->foreignId('escuderia_id');
-            $table->unsignedBigInteger('piloto_id');
-
-            $table->foreign('piloto_id')->references('id')->on('users');
+            $table->integer('edad');
+            $table->foreignId('escuderia_id')->constrained();
             $table->timestamps();
         });
     }
