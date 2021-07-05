@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Carrera;
 use App\Models\Piloto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class CarreraController extends Controller
 {
@@ -39,6 +42,7 @@ class CarreraController extends Controller
      */
     public function create()
     {
+        Gate::authorize('admin-carreras');
         return view('carrera.carrera-form');
     }
 
@@ -50,6 +54,7 @@ class CarreraController extends Controller
      */
     public function store(Request $request)
     {
+        Gate::authorize('admin-carreras');
         $request->validate($this->rules);
         //$request->merge(['escuderia_id' => $request->escuderia()->id]);
         Carrera::create($request->all());
@@ -65,6 +70,7 @@ class CarreraController extends Controller
      */
     public function show(Carrera $carrera)
     {
+        
         $pilotos_all = Piloto::all();
         return view('carrera.carrera-show', compact('carrera', 'pilotos_all'));
     }
@@ -77,6 +83,7 @@ class CarreraController extends Controller
      */
     public function edit(Carrera $carrera)
     {        
+        Gate::authorize('admin-carreras');
         return view('carrera.carrera-form', compact('carrera'));
     }
 
@@ -89,6 +96,7 @@ class CarreraController extends Controller
      */
     public function update(Request $request, Carrera $carrera)
     {
+        Gate::authorize('admin-carreras');
         $request->validate($this->rules);
         Carrera::where('id', $carrera->id)->update($request->except('_method','_token'));
 
@@ -103,11 +111,13 @@ class CarreraController extends Controller
      */
     public function destroy(Carrera $carrera)
     {
+        Gate::authorize('admin-carreras');
         $carrera->delete();
         return redirect()->route('carrera.index');
     }
 
     public function agregaPiloto(Request $request, Carrera $carrera){
+        Gate::authorize('admin-carreras');
         
         $carrera->pilotos()->attach($request->piloto_id);
 

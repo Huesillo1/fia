@@ -10,6 +10,7 @@
             Volver
         </a>
     </div>
+    @include('partials.form-errors')
     @if (@isset($carrera))
         {{-- Edicion de carrera --}}
         <form action="{{ route('carrera.update', $carrera) }}" method="POST">

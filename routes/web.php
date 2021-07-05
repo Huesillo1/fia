@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ArchivoController;
 use App\Http\Controllers\CarreraController;
 use App\Http\Controllers\EscuderiaController;
 use App\Http\Controllers\PilotoController;
@@ -55,6 +56,10 @@ Route::resource('escuderia', EscuderiaController::class)->middleware('verified')
 Route::resource('piloto', PilotoController::class)->middleware('verified');
 
 Route::resource('carrera', CarreraController::class)->middleware('verified');
+
+Route::resource('archivo', ArchivoController::class)->except(['edit','update','show'])->middleware('verified');
+
+Route::get('archivo/descarga/{archivo}',[ArchivoController::class, 'descargar'])->name('archivo.descargar');
 
 Route::post('carrera/{carrera}/agrega-piloto', [CarreraController::class, 'agregaPiloto'])->name('carrera.agrega-piloto');
 

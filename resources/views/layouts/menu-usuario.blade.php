@@ -1,18 +1,32 @@
 <li class="relative">
-    <button
-        class="align-middle rounded-full focus:shadow-outline-purple focus:outline-none"
-        @click="toggleProfileMenu"
-        @keydown.escape="closeProfileMenu"
-        aria-label="Account"
-        aria-haspopup="true"
-    >
-        <img
-        class="object-cover w-8 h-8 rounded-full"
-        src="https://images.unsplash.com/photo-1502378735452-bc7d86632805?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&s=aa3a807e1bbdfd4364d1f449eaa96d82"
-        alt=""
-        aria-hidden="true"
-        />
-    </button>
+    
+        
+        @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
+            <button class="align-middle rounded-full focus:shadow-outline-purple focus:outline-none flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition"
+            @click="toggleProfileMenu"
+            @keydown.escape="closeProfileMenu"
+            aria-label="Account"
+            aria-haspopup="true">
+                <img class="h-8 w-8 rounded-full object-cover" src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" />
+            </button>
+        @else
+            <span class="inline-flex rounded-md">
+                <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition"
+                @click="toggleProfileMenu"
+                @keydown.escape="closeProfileMenu"
+                aria-label="Account"
+                aria-haspopup="true">
+                    {{ Auth::user()->name }}
+
+                    <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+            </span>
+        @endif
+        
+        
+    
     <template x-if="isProfileMenuOpen">
         <ul
         x-transition:leave="transition ease-in duration-150"
@@ -23,10 +37,10 @@
         class="absolute right-0 w-56 p-2 mt-2 space-y-2 text-gray-600 bg-white border border-gray-100 rounded-md shadow-md dark:border-gray-700 dark:text-gray-300 dark:bg-gray-700"
         aria-label="submenu"
         >
-        <!--<li class="flex">
+        <li class="flex">
             <a
             class="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200"
-            href="#"
+            href="{{ asset('user/profile') }}"
             >
             <svg
                 class="w-4 h-4 mr-3"
@@ -42,10 +56,10 @@
                 d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                 ></path>
             </svg>
-            <span>Profile</span>
+            <span>Perfil</span>
             </a>
         </li>
-        <li class="flex">
+        <!--<li class="flex">
             <a
             class="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200"
             href="#"

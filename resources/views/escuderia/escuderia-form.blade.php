@@ -10,6 +10,7 @@
             Volver
         </a>
     </div>
+    @include('partials.form-errors')
     @if (@isset($escuderium))
         {{-- Edicion de escuderia --}}
         <form action="{{ route('escuderia.update', $escuderium) }}" method="POST">
