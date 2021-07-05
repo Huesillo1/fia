@@ -3,10 +3,33 @@
 namespace App\Http\Controllers;
 
 use App\Models\Escuderia;
+use App\Models\Piloto;
+use App\Http\Controllers\DB;
 use Illuminate\Http\Request;
 
 class EscuderiaController extends Controller
 {
+    private $rules;
+    /**
+     * Constructor del controlador
+     *
+     */
+    public function __construct()
+    {
+        //$this->middleware('auth')->except('index');
+        $this->rules = [
+            'nombre'=>['required','string','min:1','max:255'],
+            'motor'=>['required','string','min:1','max:255'],
+            'director'=>'required|string|min:1|max:255',
+        ];
+    }
+
+    public function inicio()
+    {
+        return view('inicio');
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -41,8 +64,9 @@ class EscuderiaController extends Controller
         // $escuderia->nombre = $request->nombre;
         // $escuderia->motor = $request->motor;
         // $escuderia->director = $request->director;
+        $request->validate($this->rules);
         Escuderia::create($request->all());
-        return redirect()->route('escuderia.escuderia-index');
+        return redirect()->route('escuderia.index');
     }
 
     /**
@@ -54,6 +78,8 @@ class EscuderiaController extends Controller
     public function show(Escuderia $escuderium)
     {
         //dd($escuderium);
+        
+        //$pilotos = $escuderium->pilotos->get();
         return view('escuderia.escuderia-show', compact('escuderium'));
     }
 
@@ -80,9 +106,10 @@ class EscuderiaController extends Controller
         // $escuderium->nombre = $request->nombre;
         // $escuderium->motor = $request->motor;
         // $escuderium->director = $request->director;
-        // $escuderium->save();
-
-        Escuderia::where('id', $request->id)->update($request->except('_token', '_method'));
+        // // $escuderium->save();
+        // dd($escuderium);
+        $request->validate($this->rules);
+        Escuderia::where('id', $escuderium->id)->update($request->except('_method','_token'));
 
         return redirect()->route('escuderia.show', $escuderium);
     }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CarreraController;
 use App\Http\Controllers\EscuderiaController;
 use App\Http\Controllers\PilotoController;
 use Illuminate\Support\Facades\Route;
@@ -20,13 +21,22 @@ Route::get('inicio', function(){
 });
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('inicio');
+});
+
+Route::get('', function () {
+    return view('inicio');
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
 
-Route::resource('escuderia', EscuderiaController::class);
+Route::resource('escuderia', EscuderiaController::class)->middleware('auth');
 
-Route::resource('piloto', PilotoController::class);
+Route::resource('piloto', PilotoController::class)->middleware('auth');
+
+Route::resource('carrera', CarreraController::class)->middleware('auth');
+
+Route::post('carrera/{carrera}/agrega-piloto', [CarreraController::class, 'agregaPiloto'])->name('carrera.agrega-piloto');
+

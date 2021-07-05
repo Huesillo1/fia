@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Carrera;
 use App\Models\Piloto;
-use App\Models\Escuderia;
-use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Http\Request;
 
-class PilotoController extends Controller
+class CarreraController extends Controller
 {
+
     private $rules;
 
     public function __construct()
@@ -16,11 +16,11 @@ class PilotoController extends Controller
         //$this->middleware('auth')->except('index');
         $this->rules = [
             'nombre'=>['required','string','min:1','max:255'],
-            'apellido'=>['required','string','min:1','max:255'],
-            'edad'=>['required', 'integer', 'min:1', 'max:100'],
+            'temporada'=>['required','string','min:4','max:4'],
+            'circuito'=>['required','string','min:1','max:255'],
+            'pais'=>['required','string','min:1','max:255'],
         ];
     }
-
     /**
      * Display a listing of the resource.
      *
@@ -28,8 +28,8 @@ class PilotoController extends Controller
      */
     public function index()
     {
-        $pilotos = Piloto::all();
-        return view('piloto.piloto-index', compact('pilotos'));
+        $carreras = Carrera::all();
+        return view('carrera.carrera-index', compact('carreras'));
     }
 
     /**
@@ -39,8 +39,7 @@ class PilotoController extends Controller
      */
     public function create()
     {
-        $escuderiums = Escuderia::all();
-        return view('piloto.piloto-form', compact('escuderiums'));
+        return view('carrera.carrera-form');
     }
 
     /**
@@ -53,58 +52,65 @@ class PilotoController extends Controller
     {
         $request->validate($this->rules);
         //$request->merge(['escuderia_id' => $request->escuderia()->id]);
-        Piloto::create($request->all());
+        Carrera::create($request->all());
 
-        return redirect()->route('piloto.index');
+        return redirect()->route('carrera.index');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Piloto  $piloto
+     * @param  \App\Models\Carrera  $carrera
      * @return \Illuminate\Http\Response
      */
-    public function show(Piloto $piloto)
+    public function show(Carrera $carrera)
     {
-        return view('piloto.piloto-show', compact('piloto'));
+        $pilotos_all = Piloto::all();
+        return view('carrera.carrera-show', compact('carrera', 'pilotos_all'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Piloto  $piloto
+     * @param  \App\Models\Carrera  $carrera
      * @return \Illuminate\Http\Response
      */
-    public function edit(Piloto $piloto)
-    {
-        $escuderiums = Escuderia::all();
-        return view('piloto.piloto-form', compact('piloto', 'escuderiums'));
+    public function edit(Carrera $carrera)
+    {        
+        return view('carrera.carrera-form', compact('carrera'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Piloto  $piloto
+     * @param  \App\Models\Carrera  $carrera
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Piloto $piloto)
+    public function update(Request $request, Carrera $carrera)
     {
         $request->validate($this->rules);
-        Piloto::where('id', $piloto->id)->update($request->except('_method','_token'));
+        Carrera::where('id', $carrera->id)->update($request->except('_method','_token'));
 
-        return redirect()->route('piloto.show', $piloto);
+        return redirect()->route('carrera.show', $carrera);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Piloto  $piloto
+     * @param  \App\Models\Carrera  $carrera
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Piloto $piloto)
+    public function destroy(Carrera $carrera)
     {
-        $piloto->delete();
-        return redirect()->route('piloto.index');
+        $carrera->delete();
+        return redirect()->route('carrera.index');
+    }
+
+    public function agregaPiloto(Request $request, Carrera $carrera){
+        
+        $carrera->pilotos()->attach($request->piloto_id);
+
+        return redirect()->route('carrera.show', $carrera);
     }
 }
