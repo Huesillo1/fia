@@ -22,17 +22,7 @@
         @csrf
         
         <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">                
-            @if ($errors->any())
-                <div class="min-w-0 p-4 text-white bg-purple-600 rounded-lg shadow-xs">
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                </div>
-            @endif
+            @include('partials.form-errors')
             <label class="block mt-4 text-sm">
                 <span class="text-gray-700 dark:text-gray-400">Nombre(s)</span>
                 <input class="block w-full mt-1 text-sm dark:text-gray-300 dark:bg-gray-700 focus:outline-none form-input @error('nombre') border-red-600 focus:border-red-400 focus:shadow-outline-red @else dark:border-gray-600  focus:border-purple-400  focus:shadow-outline-purple  dark:focus:shadow-outline-gray @enderror "
